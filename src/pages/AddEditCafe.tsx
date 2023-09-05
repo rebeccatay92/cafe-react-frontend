@@ -4,6 +4,7 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
+import { api } from '../constants'
 
 type Props = {
   type: 'add' | 'edit'
@@ -29,7 +30,7 @@ const AddEditCafe = ({ type }: Props) => {
   useEffect(() => {
     if (type === 'edit' && cafeId) {
       try {
-        axios.get(`http://localhost:3001/cafes/${cafeId}`)
+        axios.get(`${api.cafes}${cafeId}`)
           .then(res => {
             const { name, description, location } = res.data
             setCafe({ name, description, location })
@@ -55,7 +56,7 @@ const AddEditCafe = ({ type }: Props) => {
       const { name, description, location } = values
       if (type === 'add') {
         try {
-          await axios.post(`http://localhost:3001/cafes`, {
+          await axios.post(api.cafes, {
             name,
             description,
             location
@@ -67,7 +68,7 @@ const AddEditCafe = ({ type }: Props) => {
         }
       } else {
         try {
-          await axios.put(`http://localhost:3001/cafes/${cafeId}`, {
+          await axios.put(`${api.cafes}${cafeId}`, {
             name,
             description,
             location

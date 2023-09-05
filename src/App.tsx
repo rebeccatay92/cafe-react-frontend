@@ -4,6 +4,7 @@ import Root from './pages/Root'
 import Cafes from './pages/Cafes'
 import AddEditCafe from './pages/AddEditCafe'
 import Employees from './pages/Employees'
+import AddEditEmployee from './pages/AddEditEmployee'
 
 const router = createBrowserRouter([
   {
@@ -28,11 +29,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/employees/:id',
-        element: (<div>edit employee</div>)
+        element: (<AddEditEmployee type="edit" />)
       },
       {
         path: '/employees/new',
-        element: (<div>add employee</div>)
+        element: (<AddEditEmployee type="add" />)
       }
     ]
   }
