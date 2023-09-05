@@ -3,6 +3,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import Root from './pages/Root'
 import Cafes from './pages/Cafes'
+import AddEditCafe from './pages/AddEditCafe'
+import Employees from './pages/Employees'
 
 const router = createBrowserRouter([
   {
@@ -15,15 +17,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/cafes/:id',
-        element: (<div>edit cafe</div>)
+        element: (<AddEditCafe type="edit" />)
       },
       {
         path: '/cafes/new',
-        element: (<div>add cafe</div>)
+        element: (<AddEditCafe type="add" />)
       },
       {
         path: '/employees',
-        element: (<div>employees</div>)
+        element: (<Employees />)
       },
       {
         path: '/employees/:id',

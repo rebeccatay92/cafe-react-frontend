@@ -1,15 +1,17 @@
-import testReducer from "./testSlice";
-import { TestsStateType } from "./types";
-
+import cafesReducer from "./cafeSlice";
+import employeesReducer from "./employeeSlice";
+import { CafesStateType, EmployeesStateType } from "./types";
 
 export type StateType = {
   // Reducers types here
-  tests: TestsStateType;
+  cafes: CafesStateType;
+  employees: EmployeesStateType;
 };
 
 const rootReducers = {
   // Reducers here
-  test: testReducer
+  cafes: cafesReducer,
+  employees: employeesReducer,
 };
 
 export default rootReducers;

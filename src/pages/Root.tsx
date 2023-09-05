@@ -1,10 +1,7 @@
 import React, { useState } from "react"
 import { Outlet } from "react-router-dom"
-import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Link, ListItemButton } from "@mui/material"
+import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, ListItemButton } from "@mui/material"
 import { Menu as MenuIcon } from "@mui/icons-material"
-
-import logo from './logo.svg'
-import './Root.css'
 
 const navLinks = [
   {
