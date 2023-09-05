@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useCallback } from 'react'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Chip, Typography } from '@mui/material'
 import { useSearchParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
@@ -11,10 +11,11 @@ import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 
 import ActionsCellRenderer from './ActionsCellRenderer'
+import { api } from '../constants'
 
 const Employees = () => {
   const dispatch = useDispatch()
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const cafe = searchParams.get('cafe')
 
   const gridRef = React.createRef<AgGridReact>();
@@ -80,7 +81,7 @@ const Employees = () => {
 
   useEffect(() => {
     // fetch employees
-    axios.get(`http://localhost:3001/employees${cafe ? `?cafe=${cafe}` : ''}`)
+    axios.get(`${api.employees}${cafe ? `?cafe=${cafe}` : ''}`)
       .then(res => {
         dispatch(setEmployeesAction(res.data))
       })
@@ -93,14 +94,18 @@ const Employees = () => {
 
       <Button variant="contained" sx={{ my: 2 }} component='a' href="/employees/new">Add new employee</Button>
 
+      <Box>
+        {cafe && <Chip label={`Cafe: ${cafe}`} sx={{ my: 2 }} onDelete={() => { setSearchParams({})}}/>}
+      </Box>
+
       <div className='ag-theme-alpine' style={{ width: '100%', height: 800 }}>
         <AgGridReact
-          ref={gridRef} // Ref for accessing Grid's API
-          rowData={employees} // Row Data for Rows
-          rowHeight={64} // Optional - Set row height for rows
-          columnDefs={columnDefs} // Column Defs for Columns
-          defaultColDef={defaultColDef} // Default Column Properties
-          animateRows={true} // Optional - set to 'true' to have rows animate when sorted
+          ref={gridRef}
+          rowData={employees}
+          rowHeight={64}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          animateRows={true}
         />
       </div>
     </Box>

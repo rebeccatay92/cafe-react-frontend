@@ -39,7 +39,7 @@ const AddEditCafe = ({ type }: Props) => {
         console.error(error)
       }
     }
-  }, [cafeId])
+  }, [type, cafeId])
 
   const [cafe, setCafe] = useState({
     name: '',

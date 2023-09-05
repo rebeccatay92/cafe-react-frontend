@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Box, Button, Stack, Typography, TextField, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
@@ -41,7 +41,7 @@ const AddEditEmployee = ({ type }: Props) => {
         console.error(error)
       }
     }
-  }, [employeeId])
+  }, [type, employeeId])
 
   const [employee, setEmployee] = useState({
     name: '',
