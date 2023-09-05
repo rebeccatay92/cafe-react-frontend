@@ -63,7 +63,7 @@ const Cafes = () => {
         }
       }
     ]
-  }, [deleteCafe])
+  }, [deleteCafe, setSearchParams])
 
   const defaultColDef = useMemo(()=> ({
     sortable: false

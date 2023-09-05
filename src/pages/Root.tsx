@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { Outlet } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { Outlet, useNavigate } from "react-router-dom"
 import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, ListItemButton } from "@mui/material"
 import { Menu as MenuIcon } from "@mui/icons-material"
 
@@ -24,7 +24,11 @@ const navLinks = [
 const Root = () => {
   const [showNavigationDrawer, setNavigationDrawer] = useState(false)
 
-  // sample
+  const navigate = useNavigate()
+  useEffect(() => {
+    navigate('/cafes')
+  }, [navigate])
+
   return (
     <Box>
       <AppBar sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
