@@ -21,6 +21,15 @@ export const employeeSlice = createSlice({
         state.all[employee._id] = employee;
       });
     },
+    deleteEmployeeAction: (
+      state: EmployeesStateType,
+      action: PayloadAction<string>
+    ) => {
+      state.index.items = state.index.items.filter(
+        (id: string) => id !== action.payload
+      );
+      delete state.all[action.payload];
+    },
   },
 });
 
@@ -35,5 +44,6 @@ export const selectEmployees = createSelector(
     return index.items.map((id: string) => all[id]);
   }
 );
-export const { setEmployeesAction } = employeeSlice.actions;
+export const { setEmployeesAction, deleteEmployeeAction } =
+  employeeSlice.actions;
 export default employeeSlice.reducer;

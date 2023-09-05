@@ -5,14 +5,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, ICellRendererParams } from 'ag-grid-community'
-import { selectEmployees, setEmployeesAction } from '../store/employeeSlice'
+import { selectEmployees, setEmployeesAction, deleteEmployeeAction } from '../store/employeeSlice'
 
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 
 import ActionsCellRenderer from './ActionsCellRenderer'
-
-import dayjs from 'dayjs'
 
 const Employees = () => {
   const dispatch = useDispatch()
@@ -22,6 +20,19 @@ const Employees = () => {
   const gridRef = React.createRef<AgGridReact>();
 
   const employees = useSelector(selectEmployees)
+
+  const deleteEmployee = useCallback(async (id: string) => {
+    let toDelete = window.confirm('Are you sure you want to delete this employee?')
+    if (toDelete) {
+      try {
+        await axios.delete(`http://localhost:3001/employees/${id}`)
+        dispatch(deleteEmployeeAction(id))
+        window.alert(`Employee deleted successfully`)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+  }, [dispatch])
 
   const columnDefs: ColDef[] = useMemo(() => {
     return [
@@ -46,12 +57,7 @@ const Employees = () => {
         field: 'Days worked',
         resizable: true,
         width: 150,
-        cellRenderer: (params: ICellRendererParams) => {
-          let startDate = dayjs(params.data.start_date)
-          let currentDate = dayjs()
-          let difference = currentDate.diff(startDate, 'day')
-          return difference
-        }
+        cellRenderer: (params: ICellRendererParams) => params.data.days_worked
       },
       { field: 'cafe', resizable: true },
       {
@@ -60,13 +66,13 @@ const Employees = () => {
           return (
             <ActionsCellRenderer
               editLink={`/employees/${params.data._id}`}
-              onClickDelete={async () => { }}
+              onClickDelete={async () => {deleteEmployee(params.data._id)}}
             />
           )
         }
       }
     ]
-  }, [])
+  }, [deleteEmployee])
 
   const defaultColDef = useMemo(()=> ({
     sortable: false
