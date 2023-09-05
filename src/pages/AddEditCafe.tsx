@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Button, Stack, Typography, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios'
 
 type Props = {
   type: 'add' | 'edit'
@@ -21,14 +23,62 @@ const validationSchema = yup.object({
 })
 
 const AddEditCafe = ({ type }: Props) => {
+  const navigate = useNavigate()
+  const { id: cafeId } = useParams()
+
+  useEffect(() => {
+    if (type === 'edit' && cafeId) {
+      try {
+        axios.get(`http://localhost:3001/cafes/${cafeId}`)
+          .then(res => {
+            const { name, description, location } = res.data
+            setCafe({ name, description, location })
+          })
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }, [cafeId])
+
+  const [cafe, setCafe] = useState({
+    name: '',
+    description: '',
+    location: ''
+  })
+
+
   const formik = useFormik({
-    initialValues: {
-      name: '',
-      description: '',
-      location: ''
-    },
+    initialValues: cafe,
+    enableReinitialize: true,
     validationSchema,
-    onSubmit: (values) => { console.log('formik submit', values)}
+    onSubmit: async (values) => {
+      const { name, description, location } = values
+      if (type === 'add') {
+        try {
+          await axios.post(`http://localhost:3001/cafes`, {
+            name,
+            description,
+            location
+          })
+          window.alert('Cafe was created successfully')
+          navigate('/cafes')
+        } catch (error) {
+          console.error(error)
+        }
+      } else {
+        try {
+          await axios.put(`http://localhost:3001/cafes/${cafeId}`, {
+            name,
+            description,
+            location
+          })
+          window.alert('Cafe was edited successfully')
+          navigate('/cafes')
+        } catch (error) {
+          console.error(error)
+        }
+      }
+    }
   })
 
   return (
