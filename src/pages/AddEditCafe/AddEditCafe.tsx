@@ -35,39 +35,31 @@ const AddEditCafe = ({ type }: Props) => {
     location: ''
   })
 
+  const handleSubmit = async ({ name, description, location }: { name: string, description: string, location: string}) => {
+    let reqBody = {
+      name,
+      description,
+      location
+    }
+    try {
+      if (type === CAFE_FORM_TYPE.ADD) {
+        await axios.post(api.cafes, reqBody)
+        window.alert('Cafe was created successfully')
+      } else {
+        await axios.put(`${api.cafes}${cafeId}`, reqBody)
+         window.alert('Cafe was edited successfully')
+      }
+      navigate('/cafes')
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const formik = useFormik({
     initialValues: cafe,
     enableReinitialize: true,
     validationSchema: yupValidationSchema,
-    onSubmit: async (values) => {
-      const { name, description, location } = values
-      if (type === CAFE_FORM_TYPE.ADD) {
-        try {
-          await axios.post(api.cafes, {
-            name,
-            description,
-            location
-          })
-          window.alert('Cafe was created successfully')
-          navigate('/cafes')
-        } catch (error) {
-          console.error(error)
-        }
-      } else {
-        try {
-          await axios.put(`${api.cafes}${cafeId}`, {
-            name,
-            description,
-            location
-          })
-          window.alert('Cafe was edited successfully')
-          navigate('/cafes')
-        } catch (error) {
-          console.error(error)
-        }
-      }
-    }
+    onSubmit: handleSubmit
   })
 
   return (

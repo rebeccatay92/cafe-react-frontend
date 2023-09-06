@@ -37,40 +37,32 @@ const AddEditEmployee = ({ type }: Props) => {
     gender: ''
   })
 
+  const handleSubmit = async ({ name, email, phone, gender }: { name: string, email: string, phone: string, gender: string }) => {
+    let reqBody = {
+      name,
+      email_address: email,
+      phone_number: phone,
+      gender,
+    }
+    try {
+      if (type === EMPLOYEE_FORM_TYPE.ADD) {
+        await axios.post(`${api.employees}`, reqBody)
+        window.alert('Employee was created successfully')
+      } else {
+        await axios.put(`${api.employees}${employeeId}`, reqBody)
+        window.alert('Employee was edited successfully')
+      }
+      navigate('/employees')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const formik = useFormik({
     initialValues: employee,
     enableReinitialize: true,
     validationSchema: yupValidationSchema,
-    onSubmit: async (values) => {
-      const { name, email, phone, gender } = values
-      if (type === EMPLOYEE_FORM_TYPE.ADD) {
-        try {
-          await axios.post(`${api.employees}`, {
-            name,
-            email_address: email,
-            phone_number: phone,
-            gender,
-          })
-          window.alert('Employee was created successfully')
-          navigate('/employees')
-        } catch (error) {
-          console.error(error)
-        }
-      } else {
-        try {
-          await axios.put(`${api.employees}${employeeId}`, {
-            name,
-            email_address: email,
-            phone_number: phone,
-            gender,
-          })
-          window.alert('Employee was edited successfully')
-          navigate('/employees')
-        } catch (error) {
-          console.error(error)
-        }
-      }
-    }
+    onSubmit: handleSubmit
   })
 
   return (

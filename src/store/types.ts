@@ -1,7 +1,3 @@
-export type TestsStateType = {
-  hello: string;
-};
-
 export type CafesStateType = {
   all: {
     [key: string]: object;
