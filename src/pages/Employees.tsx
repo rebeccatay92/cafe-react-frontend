@@ -10,7 +10,7 @@ import { selectEmployees, setEmployeesAction, deleteEmployeeAction } from '../st
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 
-import ActionsCellRenderer from './ActionsCellRenderer'
+import ActionsCellRenderer from '../components/ActionsCellRenderer'
 import { api } from '../constants'
 
 const Employees = () => {

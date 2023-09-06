@@ -1,36 +1,23 @@
 import { useState, useEffect } from 'react'
-import { Box, Button, Stack, Typography, TextField, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material'
+import { Box, Button, Stack, Typography, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material'
 import { useFormik } from 'formik'
-import * as yup from 'yup'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 
-import { api } from '../constants'
+import { api } from '../../constants'
+import FormikTextField from '../../components/FormikTextField'
+import { formikTextFields, yupValidationSchema, EMPLOYEE_FORM_TYPE } from './formConstants'
 
 type Props = {
-  type: 'add' | 'edit'
+  type: EMPLOYEE_FORM_TYPE
 }
-
-const validationSchema = yup.object({
-  name: yup.string()
-    .min(6, 'Name must be at least 6 characters')
-    .max(10, 'Name must be at most 10 characters')
-    .required('Name is required'),
-  email: yup.string()
-    .email()
-    .required('Email is required'),
-  phone: yup.string()
-    .matches(/^[8-9]\d{7}$/, { message: 'Phone number must be 8 digits long and start with 8 or 9' })
-    .required('Phone is required'),
-  gender: yup.string().required('Gender is required')
-})
 
 const AddEditEmployee = ({ type }: Props) => {
   const navigate = useNavigate()
   const { id: employeeId } = useParams()
 
   useEffect(() => {
-    if (type === 'edit' && employeeId) {
+    if (type === EMPLOYEE_FORM_TYPE.EDIT && employeeId) {
       try {
         axios.get(`${api.employees}${employeeId}`)
           .then(res => {
@@ -53,10 +40,10 @@ const AddEditEmployee = ({ type }: Props) => {
   const formik = useFormik({
     initialValues: employee,
     enableReinitialize: true,
-    validationSchema,
+    validationSchema: yupValidationSchema,
     onSubmit: async (values) => {
       const { name, email, phone, gender } = values
-      if (type === 'add') {
+      if (type === EMPLOYEE_FORM_TYPE.ADD) {
         try {
           await axios.post(`${api.employees}`, {
             name,
@@ -88,7 +75,7 @@ const AddEditEmployee = ({ type }: Props) => {
 
   return (
     <Box>
-      <Typography variant="h4">{type === 'add' ? 'Add an' : 'Edit'} employee</Typography>
+      <Typography variant="h4">{type === EMPLOYEE_FORM_TYPE.ADD ? 'Add an' : 'Edit'} employee</Typography>
 
       <Box sx={{ my: 2, maxWidth: 600 }}>
         <form onSubmit={(e) => {
@@ -96,38 +83,16 @@ const AddEditEmployee = ({ type }: Props) => {
           formik.handleSubmit(e)
         }}>
           <Stack rowGap={2}>
-            <TextField
-              id="name"
-              name="name"
-              label="Name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
-            />
-
-            <TextField
-              id="phone"
-              name="phone"
-              label="Phone"
-              value={formik.values.phone}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.phone && Boolean(formik.errors.phone)}
-              helperText={formik.touched.phone && formik.errors.phone}
-            />
-
-            <TextField
-              id="email"
-              name="email"
-              label="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
-            />
+            {formikTextFields.map(({ field, label }) => {
+              return (
+                <FormikTextField
+                  key={field}
+                  field={field}
+                  label={label}
+                  formik={formik}
+                />
+              )
+            })}
 
             <FormControl component="fieldset">
               <RadioGroup name="gender" value={formik.values.gender} onChange={(e) => formik.setFieldValue('gender', e.target.value)}>

@@ -2,9 +2,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import Root from './pages/Root'
 import Cafes from './pages/Cafes'
-import AddEditCafe from './pages/AddEditCafe'
+import AddEditCafe from './pages/AddEditCafe/AddEditCafe'
 import Employees from './pages/Employees'
-import AddEditEmployee from './pages/AddEditEmployee'
+import AddEditEmployee from './pages/AddEditEmployee/AddEditEmployee'
+import { CAFE_FORM_TYPE } from './pages/AddEditCafe/formConstants'
+import { EMPLOYEE_FORM_TYPE } from './pages/AddEditEmployee/formConstants'
 
 const router = createBrowserRouter([
   {
@@ -17,11 +19,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/cafes/:id',
-        element: (<AddEditCafe type="edit" />)
+        element: (<AddEditCafe type={CAFE_FORM_TYPE.EDIT} />)
       },
       {
         path: '/cafes/new',
-        element: (<AddEditCafe type="add" />)
+        element: (<AddEditCafe type={CAFE_FORM_TYPE.ADD} />)
       },
       {
         path: '/employees',
@@ -29,11 +31,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/employees/:id',
-        element: (<AddEditEmployee type="edit" />)
+        element: (<AddEditEmployee type={EMPLOYEE_FORM_TYPE.EDIT} />)
       },
       {
         path: '/employees/new',
-        element: (<AddEditEmployee type="add" />)
+        element: (<AddEditEmployee type={EMPLOYEE_FORM_TYPE.ADD} />)
       }
     ]
   }

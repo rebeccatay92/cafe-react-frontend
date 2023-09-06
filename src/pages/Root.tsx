@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Outlet, useNavigate } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, ListItemButton } from "@mui/material"
 import { Menu as MenuIcon } from "@mui/icons-material"
 
@@ -23,11 +23,14 @@ const navLinks = [
 ]
 const Root = () => {
   const [showNavigationDrawer, setNavigationDrawer] = useState(false)
+  const location = useLocation()
 
   const navigate = useNavigate()
   useEffect(() => {
-    navigate('/cafes')
-  }, [navigate])
+    if (location.pathname === '/') {
+      navigate('/cafes')
+    }
+  }, [navigate, location.pathname])
 
   return (
     <Box>

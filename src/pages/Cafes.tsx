@@ -9,7 +9,7 @@ import { ColDef, ICellRendererParams } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 
-import ActionsCellRenderer from './ActionsCellRenderer'
+import ActionsCellRenderer from '../components/ActionsCellRenderer'
 import { selectCafes, setCafesAction, deleteCafeAction } from '../store/cafeSlice'
 import { api } from '../constants'
 
